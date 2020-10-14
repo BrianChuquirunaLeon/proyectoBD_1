@@ -1,4 +1,3 @@
-
 package vista;
 
 import java.sql.Connection;
@@ -11,12 +10,9 @@ import modelo.Conexion;
 
 public class BuscarPorIdVenta extends javax.swing.JFrame {
 
-
     public BuscarPorIdVenta() {
         initComponents();
-        
     }
-
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -286,77 +282,75 @@ public class BuscarPorIdVenta extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarVentaActionPerformed
-        
+
         String campo = txtCampo.getText();
         String where = "";
-        
+
         //Solo debemos hacer la consulta si existe un ID ingresado, sino no tiene sentido buscar
-        if(!"".equals(campo)){
-            where = " WHERE codigo = "+campo;
+        if (!"".equals(campo)) {
+            where = " WHERE codigo = " + campo;
         }
-        
-        try{
+
+        try {
             DefaultTableModel modelo = new DefaultTableModel();
             jtProductos.setModel(modelo);
-            
-            PreparedStatement ps=null;
-            ResultSet rs=null;
-            
-            PreparedStatement ps_sq=null;
-            ResultSet rs_sq=null;
-            Conexion conn= new Conexion();
+
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+
+            PreparedStatement ps_sq = null;
+            ResultSet rs_sq = null;
+            Conexion conn = new Conexion();
             Connection con = conn.getConexion();
-            
-            String sq = "SELECT V.nombre ,C.nombre,B.fecha_venta \n"+
-            "FROM vendedor V,cliente C, venta B, producto P, contiene A \n"
-            +"WHERE B.id_venta = "+campo+" AND B.id_vendedor = V.id_vendedor AND C.id_cliente = B.id_cliente;";
-                    
+
+            String sq = "SELECT V.nombre ,C.nombre,B.fecha_venta \n"
+                    + "FROM vendedor V,cliente C, venta B, producto P, contiene A \n"
+                    + "WHERE B.id_venta = " + campo + " AND B.id_vendedor = V.id_vendedor AND C.id_cliente = B.id_cliente;";
+
             ps_sq = con.prepareStatement(sq);
             rs_sq = ps_sq.executeQuery();// obtengo lo que hay en la base de datos y lo almaceno temporalmente en rs
-                    
-            String sql ="SELECT P.nom_prod, A.precio_venta,A.cantidad \n" +
-            "FROM vendedor V,cliente C, venta B, producto P, contiene A \n" +
-            "WHERE B.id_venta = "+campo+" AND B.id_vendedor = V.id_vendedor AND C.id_cliente = B.id_cliente \n" +
-            "AND A.id_venta = B.id_venta AND A.id_producto = P.id_producto;";
-            
+
+            String sql = "SELECT P.nom_prod, A.precio_venta,A.cantidad \n"
+                    + "FROM vendedor V,cliente C, venta B, producto P, contiene A \n"
+                    + "WHERE B.id_venta = " + campo + " AND B.id_vendedor = V.id_vendedor AND C.id_cliente = B.id_cliente \n"
+                    + "AND A.id_venta = B.id_venta AND A.id_producto = P.id_producto;";
+
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();// obtengo lo que hay en la base de datos y lo almaceno temporalmente en rs
-            
-            ResultSetMetaData rsMd =rs.getMetaData();
+
+            ResultSetMetaData rsMd = rs.getMetaData();
             int cantidadColumnas = rsMd.getColumnCount();
             modelo.addColumn("Nombre Producto");
             modelo.addColumn("Precio");
             modelo.addColumn("Cantidad");
-            
-            int [] anchos = {200,50,50};
-            
-            for(int x=0 ;x<cantidadColumnas;x++){
+
+            int[] anchos = {200, 50, 50};
+
+            for (int x = 0; x < cantidadColumnas; x++) {
                 jtProductos.getColumnModel().getColumn(x).setPreferredWidth(anchos[x]);
             }
-            
-            
-            if(rs_sq.next()){
+
+            if (rs_sq.next()) {
                 txtNombreCliente.setText(rs_sq.getString("C.nombre"));
                 System.out.println("haber donde se traba");
                 txtNombreVendedor.setText(rs_sq.getString("V.nombre"));
                 txtFechaVenta.setText(rs_sq.getString("B.fecha_venta"));
             }
-            while(rs.next()){// verifica si hay datos en la fila y avanza al sgt registro
-                
+            while (rs.next()) {// verifica si hay datos en la fila y avanza al sgt registro
+
                 Object filas[] = new Object[cantidadColumnas];// creo un arreglo del tipo object ya que el jtable trabaja con este tipo de dato
-                                                             //y aca almacenare los datos que extraiga de la base de datos
-                for(int i =0;i<cantidadColumnas;i++){
-                    filas[i] = rs.getObject(i+1);// guardo una columna de un registro traido de la base de datos en filas
+                //y aca almacenare los datos que extraiga de la base de datos
+                for (int i = 0; i < cantidadColumnas; i++) {
+                    filas[i] = rs.getObject(i + 1);// guardo una columna de un registro traido de la base de datos en filas
                     // esta sentencia se ejecutara la cantidad de veces necesaria para que filas[] obtenga todos los datos traidos de un registro
                 }
                 modelo.addRow(filas);
             }
-            
-            
-        }catch(SQLException ex){
+
+        } catch (SQLException ex) {
             System.out.println(ex);
         }
-        
+
     }//GEN-LAST:event_btnBuscarVentaActionPerformed
 
     private void txtCampoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCampoActionPerformed
@@ -384,153 +378,128 @@ public class BuscarPorIdVenta extends javax.swing.JFrame {
     private void btnBuscarBoletaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarBoletaActionPerformed
         String nro_serie = txtNroSerie.getText();
         String correlativo = txtCorrelativo.getText();
-        
-        try{
+
+        try {
             DefaultTableModel modelo = new DefaultTableModel();
             jtProductos.setModel(modelo);
-            
-            PreparedStatement ps=null;
-            ResultSet rs=null;
-            
-            PreparedStatement ps_sq=null;
-            ResultSet rs_sq=null;
-            Conexion conn= new Conexion();
+
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+
+            PreparedStatement ps_sq = null;
+            ResultSet rs_sq = null;
+            Conexion conn = new Conexion();
             Connection con = conn.getConexion();
-            
-            String sq = "SELECT V.nombre ,C.nombre,B.fecha_venta ,B.id_venta\n"+
-            "FROM vendedor V,cliente C, venta B, producto P, contiene A,boleta S \n"
-            +"WHERE S.nro_serie= '"+nro_serie+"' AND S.correlativo = "+correlativo+" AND "
-            + "B.id_venta = S.id_venta AND B.id_vendedor = V.id_vendedor AND C.id_cliente = B.id_cliente;";
-                    
+
+            String sq = "SELECT V.nombre ,C.nombre,B.fecha_venta ,B.id_venta\n"
+                    + "FROM vendedor V,cliente C, venta B, producto P, contiene A,boleta S \n"
+                    + "WHERE S.nro_serie= '" + nro_serie + "' AND S.correlativo = " + correlativo + " AND "
+                    + "B.id_venta = S.id_venta AND B.id_vendedor = V.id_vendedor AND C.id_cliente = B.id_cliente;";
+
             ps_sq = con.prepareStatement(sq);
             rs_sq = ps_sq.executeQuery();// obtengo lo que hay en la base de datos y lo almaceno temporalmente en rs
-                    
-            String sql ="SELECT P.nom_prod,A.precio_venta,A.cantidad \n" +
-                        "FROM vendedor V,cliente C, venta B, producto P, contiene A, boleta S\n" +
-                        "WHERE S.nro_serie= '"+nro_serie+"' AND S.correlativo = "+correlativo+" AND \n" +
-                        "B.id_venta = S.id_venta AND B.id_vendedor = V.id_vendedor AND C.id_cliente = B.id_cliente \n" +
-                        "AND A.id_venta = B.id_venta AND A.id_producto = P.id_producto";
-            
+
+            String sql = "SELECT P.nom_prod,A.precio_venta,A.cantidad \n"
+                    + "FROM vendedor V,cliente C, venta B, producto P, contiene A, boleta S\n"
+                    + "WHERE S.nro_serie= '" + nro_serie + "' AND S.correlativo = " + correlativo + " AND \n"
+                    + "B.id_venta = S.id_venta AND B.id_vendedor = V.id_vendedor AND C.id_cliente = B.id_cliente \n"
+                    + "AND A.id_venta = B.id_venta AND A.id_producto = P.id_producto";
+
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();// obtengo lo que hay en la base de datos y lo almaceno temporalmente en rs
-            
-            ResultSetMetaData rsMd =rs.getMetaData();
+
+            ResultSetMetaData rsMd = rs.getMetaData();
             int cantidadColumnas = rsMd.getColumnCount();
             modelo.addColumn("Nombre Producto");
             modelo.addColumn("Precio");
             modelo.addColumn("Cantidad");
-            
-            int [] anchos = {200,50,50};
-            
-            for(int x=0 ;x<cantidadColumnas;x++){
+
+            int[] anchos = {200, 50, 50};
+
+            for (int x = 0; x < cantidadColumnas; x++) {
                 jtProductos.getColumnModel().getColumn(x).setPreferredWidth(anchos[x]);
             }
-            
-            
-            if(rs_sq.next()){
+
+            if (rs_sq.next()) {
                 txtNombreCliente.setText(rs_sq.getString("C.nombre"));
                 txtNombreVendedor.setText(rs_sq.getString("V.nombre"));
                 txtFechaVenta.setText(rs_sq.getString("B.fecha_venta"));
                 txtCampo.setText(rs_sq.getString("B.id_venta"));
             }
-            float suma=0;
-            while(rs.next()){// verifica si hay datos en la fila y avanza al sgt registro
-                
+            float suma = 0;
+            while (rs.next()) {// verifica si hay datos en la fila y avanza al sgt registro
+
                 Object filas[] = new Object[cantidadColumnas];// creo un arreglo del tipo object ya que el jtable trabaja con este tipo de dato
-                             //y aca almacenare los datos que extraiga de la base de datos
-                for(int i =0;i<cantidadColumnas;i++){
-                    filas[i] = rs.getObject(i+1);// guardo una columna de un registro traido de la base de datos en filas
+                //y aca almacenare los datos que extraiga de la base de datos
+                for (int i = 0; i < cantidadColumnas; i++) {
+                    filas[i] = rs.getObject(i + 1);// guardo una columna de un registro traido de la base de datos en filas
                     // esta sentencia se ejecutara la cantidad de veces necesaria para que filas[] obtenga todos los datos traidos de un registro
-                    
+
                 }
                 //el precio es float en la BD por eso le asigno un float aca
-                float temp1 = (float)filas[1];
+                float temp1 = (float) filas[1];
                 //La cantidad es un entero en la BD por eso le asigno un int aca
-                int temp2 = (int)filas[2];
-                suma = suma +(temp1*temp2);
+                int temp2 = (int) filas[2];
+                suma = suma + (temp1 * temp2);
                 modelo.addRow(filas);
             }
-            
+
             txtTotal.setText(String.valueOf(suma));
-            
-        }catch(SQLException ex){
+
+        } catch (SQLException ex) {
             System.out.println(ex);
         }
     }//GEN-LAST:event_btnBuscarBoletaActionPerformed
 
     private void btnInsertarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarVentaActionPerformed
-        PreparedStatement ps=null;
-        ResultSet rs=null;
-        Conexion conn= new Conexion();
+        PreparedStatement ps = null;
+        PreparedStatement ps_max = null;
+        ResultSet rs = null;
+        Conexion conn = new Conexion();
         Connection con = conn.getConexion();
-        
-        
+
         String sql = "INSERT INTO venta(id_vendedor,id_cliente) VALUES (?,?)";
-        
+        String maximobaby = "SELECT * FROM venta";
+
         String id_vendedor = txtIdVendedor.getText();
         String id_cliente = txtIdCliente.getText();
 
-        try{
-            ps= con.prepareStatement(sql);
-            ps.setString(1,id_vendedor);
-            ps.setString(2,id_cliente);
-            rs = ps.executeQuery();// ejecuta el codigo sql guardado en ps y guarda el valor en rs
-            //ps.execute();// ejecuta el codigo sql guardado en ps y no devuelve ningun valor
-            
-                 
+        try {
 
-            IngrresarDetalleVenta detalle = new IngrresarDetalleVenta();
+            //Insertamos una nueva tabla venta a la BD
+            ps = con.prepareStatement(sql);
+            ps.setString(1, id_vendedor);
+            ps.setString(2, id_cliente);
+            ps.execute();// ejecuta el codigo sql guardado en ps y no devuelve ningun valor
+
+            /*obtenemos el id_venta para asociarlos a los productos  de esta venta*/
+            ps_max = con.prepareStatement(maximobaby);
+            rs = ps_max.executeQuery();// ejecuta el codigo sql guardado en ps y guarda el valor en rs
+            rs.last();//Mueve el cursor hacia la ultima fila del registro
+            String maxIdVenta;//Aca pondremos el id de la venta que acabamos de ingresar
+            //System.out.println("Este es el rs: " + rs.getString("venta.id_vendedor"));
+            maxIdVenta = new String(rs.getString("venta.id_venta"));
+            //maxIdVenta = ;
+            System.out.println("maximo id de venta : "+maxIdVenta);
+            IngrresarDetalleVenta detalle = new IngrresarDetalleVenta(maxIdVenta);
             detalle.setVisible(true);
             this.dispose();
-        }catch(SQLException e){
-            System.err.println(e); 
-        }
-        
-        finally{
-            try{
+
+        } catch (SQLException e) {
+            System.err.println(e);
+        } finally {
+            try {
                 con.close();
-            }catch(SQLException e){
+            } catch (SQLException e) {
                 System.err.println(e);
             }
         }
-        
+
     }//GEN-LAST:event_btnInsertarVentaActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(BuscarPorIdVenta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(BuscarPorIdVenta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(BuscarPorIdVenta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(BuscarPorIdVenta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new BuscarPorIdVenta().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarBoleta;

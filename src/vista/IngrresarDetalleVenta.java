@@ -19,7 +19,10 @@ public class IngrresarDetalleVenta extends javax.swing.JFrame {
     /**
      * Creates new form IngrresarDetalleVenta
      */
-    public IngrresarDetalleVenta() {
+    public String maxIdVenta;
+    
+    public IngrresarDetalleVenta(String maxIdVenta) {
+        this.maxIdVenta = maxIdVenta;
         initComponents();
     }
 
@@ -57,6 +60,11 @@ public class IngrresarDetalleVenta extends javax.swing.JFrame {
         });
 
         btnTerminar.setText("TERMINAR");
+        btnTerminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTerminarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -106,7 +114,7 @@ public class IngrresarDetalleVenta extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        /*PreparedStatement ps=null;
+        PreparedStatement ps=null;
         Conexion conn= new Conexion();
         Connection con = conn.getConexion();
         
@@ -114,16 +122,15 @@ public class IngrresarDetalleVenta extends javax.swing.JFrame {
         
         try{
             ps= con.prepareStatement(sql);
-            ps.setString(1,id_producto);
-            ps.setString(2,id_venta);
+            ps.setString(1,txtIdProducto.getText());
+            ps.setString(2,maxIdVenta);
             ps.setString(3,txtCantidad.getText());
             ps.setString(4,txtPrecio.getText());
             ps.execute();// ejecuta el codigo sql guardado en ps y no devuelve ningun valor
             
-            txtNombre.setText(null);
-            txtApeMat.setText(null);
-            txtxApePat.setText(null);
-            txtIdVendedor.setText(null);
+            txtIdProducto.setText(null);
+            txtCantidad.setText(null);
+            txtPrecio.setText(null);
             
         }catch(SQLException e){
             System.err.println(e);
@@ -135,43 +142,19 @@ public class IngrresarDetalleVenta extends javax.swing.JFrame {
             }catch(SQLException e){
                 System.err.println(e);
             }
-        }*/
+        }
     }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnTerminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTerminarActionPerformed
+            BuscarPorIdVenta detalle = new BuscarPorIdVenta();
+            detalle.setVisible(true);
+            this.dispose();
+    }//GEN-LAST:event_btnTerminarActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(IngrresarDetalleVenta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(IngrresarDetalleVenta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(IngrresarDetalleVenta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(IngrresarDetalleVenta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new IngrresarDetalleVenta().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
